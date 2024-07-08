@@ -1,6 +1,6 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/<your_project_id>/gke-repo/quickstart-image', './app1' ]
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/silken-acronym-407909/gke-repo/quickstart-image', './app1' ]
   id: 'Build Docker Image'
 
   # images:
