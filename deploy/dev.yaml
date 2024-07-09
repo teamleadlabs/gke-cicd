@@ -6,5 +6,5 @@ metadata:
   labels: {}
 description: dev
 gke:
-  cluster: projects/silken-acronym-407909/locations/us-central1/clusters/devcluster
+  cluster: projects/gke-cicd-428904/locations/us-central1/clusters/devcluster
 
