@@ -1,35 +1,42 @@
-steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/quickstart-image', './app1']
-  id: 'Build Docker Image 1'
+# steps:
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['build', '-t', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/quickstart-image', './app1']
+#   id: 'Build Docker Image 1'
 
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/quickstart-image']
-  id: 'Push Docker Image 1'
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['push', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/quickstart-image']
+#   id: 'Push Docker Image 1'
 
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/flask-image', './app2']
-  id: 'Build Docker Image 2'
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['build', '-t', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/flask-image', './app2']
+#   id: 'Build Docker Image 2'
 
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/flask-image']
-  id: 'Push Docker Image 2'
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['push', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/flask-image']
+#   id: 'Push Docker Image 2'
 
-- name: 'google/cloud-sdk:latest'
-  entrypoint: 'sh'
-  args:
-    - -xe
-    - -c
-    - |
-      gcloud deploy apply --file deploy/pipeline.yaml --region=us-central1
-      gcloud deploy apply --file deploy/dev.yaml --region=us-central1
-      gcloud deploy apply --file deploy/prod.yaml --region=us-central1
+# - name: 'google/cloud-sdk:latest'
+#   entrypoint: 'sh'
+#   args:
+#     - -xe
+#     - -c
+#     - |
+#       gcloud deploy apply --file deploy/pipeline.yaml --region=us-central1
+#       gcloud deploy apply --file deploy/dev.yaml --region=us-central1
+#       gcloud deploy apply --file deploy/prod.yaml --region=us-central1
 
-      gcloud deploy releases create "app-release-${SHORT_SHA}" --delivery-pipeline=gke-cicd-pipeline --region=us-central1 --from-k8s-manifest=./kubernetes/app1.yaml
-#  gcloud deploy releases create "app2-release-${SHORT_SHA}" --delivery-pipeline=gke-cicd-pipeline --region=us-central1 --from-k8s-manifest=./kubernetes/app2.yaml
+#       gcloud deploy releases create "app-release-${SHORT_SHA}" --delivery-pipeline=gke-cicd-pipeline --region=us-central1 --from-k8s-manifest=./kubernetes/app1.yaml
 
-options:
-  logging: CLOUD_LOGGING_ONLY
+# options:
+#   logging: CLOUD_LOGGING_ONLY
+
+
+
+
+
+
+
+
 # steps:
 # - name: 'gcr.io/cloud-builders/docker'
 #   args: ['build', '-t', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/quickstart-image', './app1']
@@ -62,3 +69,38 @@ options:
 
 # options:
 #   logging: CLOUD_LOGGING_ONLY
+
+
+
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/quickstart-image', './app1']
+  id: 'Build Docker Image 1'
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/quickstart-image']
+  id: 'Push Docker Image 1'
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/flask-image', './app2']
+  id: 'Build Docker Image 2'
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/flask-image']
+  id: 'Push Docker Image 2'
+
+- name: 'google/cloud-sdk:latest'
+  entrypoint: 'sh'
+  args:
+    - -xe
+    - -c
+    - |
+      set -e
+      gcloud auth configure-docker us-central1-docker.pkg.dev
+      gcloud deploy apply --file deploy/pipeline.yaml --region=us-central1
+      gcloud deploy apply --file deploy/dev.yaml --region=us-central1
+      gcloud deploy apply --file deploy/prod.yaml --region=us-central1
+      gcloud deploy releases create "app-release-${SHORT_SHA}" --delivery-pipeline=gke-cicd-pipeline --region=us-central1 --from-k8s-manifest=./kubernetes/app1.yaml
+
+options:
+  logging: CLOUD_LOGGING_ONLY
