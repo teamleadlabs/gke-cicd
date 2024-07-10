@@ -74,7 +74,7 @@
 
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/quickstart-image', './app1']
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/gke-cicd-428904/gke-repo/quickstart-image', './app']
   id: 'Build Docker Image 1'
 
 - name: 'gcr.io/cloud-builders/docker'
@@ -100,7 +100,7 @@ steps:
       gcloud deploy apply --file deploy/pipeline.yaml --region=us-central1
       gcloud deploy apply --file deploy/dev.yaml --region=us-central1
       gcloud deploy apply --file deploy/prod.yaml --region=us-central1
-      gcloud deploy releases create "app-release-${SHORT_SHA}" --delivery-pipeline=gke-cicd-pipeline --region=us-central1 --from-k8s-manifest=./kubernetes/app1.yaml
+      gcloud deploy releases create "app-release-${SHORT_SHA}" --delivery-pipeline=gke-cicd-pipeline --region=us-central1 --from-k8s-manifest=./kubernetes/app.yaml
 
 options:
   logging: CLOUD_LOGGING_ONLY
